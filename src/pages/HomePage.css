@@ -1,0 +1,31 @@
+.main-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px;
+    /* 3 cột */
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+}
+
+.feed-container {
+    max-width: 680px;
+    /* Độ rộng tối đa của feed giống Facebook */
+    width: 100%;
+    margin: 0 auto;
+    /* Căn giữa nếu không có sidebar phải */
+}
+
+/* Responsive cho thiết bị nhỏ hơn */
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        /* Chỉ còn 1 cột */
+    }
+
+    .left-sidebar,
+    .right-sidebar {
+        display: none;
+        /* Ẩn sidebar đi */
+    }
+}

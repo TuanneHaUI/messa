@@ -1,0 +1,89 @@
+.post-card {
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition-fast);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.post-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.post-author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-author {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.post-timestamp {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.post-content p {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.post-image {
+    width: 100%;
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+}
+
+.post-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.post-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition-fast);
+}
+
+.action-button:hover {
+    background-color: var(--color-background);
+}
+
+.action-button.liked {
+    color: var(--color-primary);
+}
+
+.action-button.liked svg {
+    fill: var(--color-primary);
+}

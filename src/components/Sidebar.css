@@ -1,0 +1,25 @@
+/* src/components/Sidebar.css */
+
+.sidebar {
+    background: var(--color-surface);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    height: fit-content;
+    /* Giúp sidebar chỉ cao bằng nội dung bên trong */
+    position: sticky;
+    top: 76px;
+    /* 60px của Header + 16px khoảng cách */
+    transition: var(--transition-fast);
+}
+
+/* Bạn có thể thêm các style cụ thể cho từng sidebar ở đây nếu muốn */
+.left-sidebar {
+    /* Ví dụ: */
+    /* border-left: 3px solid var(--color-primary); */
+}
+
+.right-sidebar {
+    /* Ví dụ: */
+    /* font-size: 0.9rem; */
+}
