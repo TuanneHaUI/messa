@@ -1,37 +1,13 @@
 /* src/components/Sidebar.css */
 
-.sidebar {
-    background: var(--color-surface);
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    height: fit-content;
-    /* Giúp sidebar chỉ cao bằng nội dung bên trong */
-    position: sticky;
-    top: 76px;
-    /* 60px của Header + 16px khoảng cách */
-    transition: var(--transition-fast);
-}
-
-/* Bạn có thể thêm các style cụ thể cho từng sidebar ở đây nếu muốn */
-.left-sidebar {
-    /* Ví dụ: */
-    /* border-left: 3px solid var(--color-primary); */
-}
-
-.right-sidebar {
-    /* Ví dụ: */
-    /* font-size: 0.9rem; */
-}
-/* src/components/Sidebar.css */
-
 /* --- Styling cho Right Sidebar --- */
 .right-sidebar {
     width: 280px;
     padding: 15px;
     position: fixed;
     right: 0;
-    top: 60px; /* Chiều cao của Header */
+    top: 60px;
+    /* Chiều cao của Header */
     height: calc(100vh - 60px);
     overflow-y: auto;
     background-color: var(--background-color);
@@ -82,7 +58,8 @@
     right: 0;
     width: 10px;
     height: 10px;
-    background-color: #4CAF50; /* Màu xanh online */
+    background-color: #4CAF50;
+    /* Màu xanh online */
     border-radius: 50%;
     border: 2px solid var(--background-color);
 }
@@ -91,7 +68,8 @@
 .chat-windows-container {
     position: fixed;
     bottom: 0;
-    right: 300px; /* Ngay cạnh Right Sidebar */
+    right: 300px;
+    /* Ngay cạnh Right Sidebar */
     display: flex;
     gap: 10px;
     z-index: 1000;
@@ -161,13 +139,15 @@
 .message-bubble.me {
     background-color: #0084ff;
     color: white;
-    align-self: flex-end; /* Tin nhắn của mình nằm bên phải */
+    align-self: flex-end;
+    /* Tin nhắn của mình nằm bên phải */
 }
 
 .message-bubble.them {
     background-color: var(--hover-color);
     color: var(--text-primary-color);
-    align-self: flex-start; /* Tin nhắn của bạn bè nằm bên trái */
+    align-self: flex-start;
+    /* Tin nhắn của bạn bè nằm bên trái */
 }
 
 .chat-box-footer {

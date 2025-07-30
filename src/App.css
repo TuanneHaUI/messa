@@ -27,7 +27,51 @@
 .App-link {
   color: #61dafb;
 }
+/* src/index.css */
 
+/* --- ĐỊNH NGHĨA BIẾN MÀU SẮC CHO TOÀN BỘ ỨNG DỤNG --- */
+
+/* :root định nghĩa biến cho chế độ mặc định (Sáng) */
+:root {
+  --primary-color: #0084ff; /* Màu nhấn chính, ví dụ: màu tin nhắn của bạn */
+  --background-color: #ffffff; /* Màu nền chính của trang */
+  --secondary-background-color: #f0f2f5; /* Màu nền phụ, ví dụ: màu của sidebar */
+  --hover-color: #e4e6eb; /* Màu khi di chuột qua, ví dụ: màu tin nhắn của người khác */
+  
+  --text-primary-color: #050505; /* Màu chữ chính */
+  --text-secondary-color: #65676b; /* Màu chữ phụ, ví dụ: tiêu đề "Người liên hệ" */
+  
+  --border-color: #ced0d4; /* Màu của các đường viền */
+  
+  --header-height: 60px; /* Biến chiều cao Header để các component khác sử dụng */
+}
+
+/* Định nghĩa lại các biến khi ở chế độ tối (Dark Mode) */
+body.dark-mode {
+  --primary-color: #0084ff;
+  --background-color: #18191a;
+  --secondary-background-color: #242526;
+  --hover-color: #3a3b3c;
+  
+  --text-primary-color: #e4e6eb;
+  --text-secondary-color: #b0b3b8;
+  
+  --border-color: #3e4042;
+}
+
+/* Các style cơ bản khác bạn có thể đã có */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Sử dụng biến màu nền ngay tại đây */
+  background-color: var(--secondary-background-color); 
+  color: var(--text-primary-color);
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
