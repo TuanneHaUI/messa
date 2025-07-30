@@ -14,5 +14,6 @@ export const loginUser = (email, password) => {
     return publicApi.post('/login', {
         email,
         password,
-    });
+    },
+        { withCredentials: true });
 };

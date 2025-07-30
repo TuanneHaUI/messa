@@ -35,7 +35,7 @@ const Header = () => {
     const handleLogout = async () => {
         try {
             await logout(); // Gọi API logout
-            localStorage.removeItem('userInfo'); // Xoá token local
+            localStorage.removeItem('refresh_token'); // Xoá token local
 
             // Hiển thị thông báo thành công
             toast.success('Đăng xuất thành công. Đang chuyển trang...', {

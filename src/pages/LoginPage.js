@@ -20,7 +20,7 @@ const LoginPage = () => {
             const { data } = await loginUser(email, password);
 
             if (data?.access_token) { // ✅ kiểm tra đúng field
-                const t = localStorage.setItem('userInfo', JSON.stringify(data));
+                const t = localStorage.setItem('refresh_token', JSON.stringify(data));
                 console.log("================>>>>>>t");
                 // setSuccess('Đăng nhập thành công!');
                 toast.success('Đăng nhập thành công. Đang chuyển trang...', {

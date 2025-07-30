@@ -7,12 +7,23 @@ import RightSidebar from '../components/RightSidebar';
 import './HomePage.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchAllPosts } from '../services/api';
-
+import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
 const HomePage = () => {
     const [posts, setPosts] = useState([]);
+    const refresh_token = JSON.parse(localStorage.getItem('refresh_token'));
+    const navigate = useNavigate();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
+        if (refresh_token === null) {
+            toast.success('Vui lòng đăng nhập. Đang chuyển trang...', {
+                position: "top-right",
+                autoClose: 1000,
+            });
+            setTimeout(() => navigate('/login'), 1000);
+        }
+
         const fetchData = async () => {
             try {
                 const fetchedPosts = await fetchAllPosts();

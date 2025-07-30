@@ -1,57 +1,53 @@
-// src/pages/ProfilePage.js
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import EditProfileModal from '../components/EditProfileModal';
+
 import './ProfilePage.css';
-// import { getMyProfile, updateMyProfile } from '../services/api'; // Sẽ dùng sau
+import { fetchProfile } from '../services/api';
 
 const ProfilePage = () => {
-    // Dữ liệu giả, sau này sẽ lấy từ API
-    const [user, setUser] = useState({
-        username: 'Sơn Tùng M-TP',
-        email: 'sontung@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=a',
-        bio: 'Sky ơi, yêu mọi người! ❤️',
-        postCount: 120,
-        followerCount: 1000000,
-        followingCount: 5
-    });
-
-    // State để điều khiển việc hiển thị modal
+    const [user, setUser] = useState(null);
+    const [posts, setPosts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    // useEffect(() => {
-    //     const fetchProfile = async () => {
-    //         setLoading(true);
-    //         try {
-    //             const { data } = await getMyProfile();
-    //             setUser(data);
-    //         } catch (error) {
-    //             console.error("Lỗi khi tải trang cá nhân", error);
-    //         }
-    //         setLoading(false);
-    //     };
-    //     fetchProfile();
-    // }, []);
+    // Gọi API khi component được mount
+    useEffect(() => {
+        const loadProfile = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchProfile();
 
-    // Hàm này sẽ được gọi khi người dùng bấm "Lưu" trong modal
+                setUser({
+                    username: data.name,
+                    bio: data.bio,
+                    avatar: data.avatar,
+                    postCount: data.postCount,
+                    followerCount: data.followerCount,
+                    followingCount: data.followingCount,
+                });
+
+                setPosts(data.posts);
+            } catch (error) {
+                console.error("Lỗi khi tải trang cá nhân:", error);
+            }
+            setLoading(false);
+        };
+
+        loadProfile();
+    }, []);
+
+    // Lưu dữ liệu khi người dùng chỉnh sửa profile
     const handleSaveProfile = (updatedData) => {
-        console.log("Dữ liệu mới để lưu:", updatedData);
-        // --- Chỗ này sẽ gọi API để cập nhật profile ---
-        // await updateMyProfile(updatedData);
-
-        // Cập nhật giao diện ngay lập tức với dữ liệu mới
         setUser(prevUser => ({
-            ...prevUser, // Giữ lại các thông tin không đổi (postCount, followerCount...)
-            ...updatedData // Ghi đè các thông tin đã thay đổi
+            ...prevUser,
+            ...updatedData
         }));
-
-        // Đóng modal
         setIsModalOpen(false);
     };
 
-    if (loading) return <div>Đang tải...</div>
+    if (loading) return <div>Đang tải...</div>;
+    if (!user) return <div>Không tìm thấy người dùng.</div>;
 
     return (
         <>
@@ -74,22 +70,27 @@ const ProfilePage = () => {
                             <span><strong>{user.followerCount}</strong> người theo dõi</span>
                             <span><strong>{user.followingCount}</strong> đang theo dõi</span>
                         </div>
-                        <p className="profile-bio">{user.bio}</p>
+                        <p className="profile-bio">{user.bio} tuán đấy</p>
                     </div>
                 </div>
+
                 <div className="profile-content">
-                    {/* Nơi hiển thị các bài đăng của người dùng */}
                     <h2>Bài viết</h2>
                     <div className="post-grid">
-                        {/* Giả lập các bài post */}
-                        <div className="post-grid-item"><img src="https://picsum.photos/300/300?random=1" alt="post" /></div>
-                        <div className="post-grid-item"><img src="https://picsum.photos/300/300?random=2" alt="post" /></div>
-                        <div className="post-grid-item"><img src="https://picsum.photos/300/300?random=3" alt="post" /></div>
+                        {posts.length === 0 ? (
+                            <p>Chưa có bài viết nào.</p>
+                        ) : (
+                            posts.map((post) => (
+                                <div key={post.id} className="post-grid-item">
+                                    <img src={post.image} alt="post" />
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
 
-            {/* Hiển thị modal nếu isModalOpen là true */}
+            {/* Modal chỉnh sửa profile */}
             {isModalOpen && (
                 <EditProfileModal
                     currentUser={user}

@@ -22,9 +22,9 @@ const CreatePost = ({ onPostCreated }) => {
     const fileInputRef = useRef();
 
     // Lấy thông tin người dùng từ localStorage để hiển thị
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const username = userInfo?.user?.name || 'Bạn';
-    const userAvatar = userInfo?.user?.avatar || "https://i.pravatar.cc/40";
+    const refresh_token = JSON.parse(localStorage.getItem('refresh_token'));
+    const username = refresh_token?.user?.name || 'Bạn';
+    const userAvatar = refresh_token?.user?.avatar || "http://localhost:8080/storage/avatar/anhdaidien.jpg";
 
     /**
      * Effect để xử lý việc đóng modal khi người dùng click ra bên ngoài.
@@ -96,8 +96,8 @@ const CreatePost = ({ onPostCreated }) => {
                         ? `http://localhost:8080/storage/posts/${newPostFromServer.imageUrl}`
                         : null,
                     author: {
-                        username: newPostFromServer.author.name,
-                        avatar: newPostFromServer.author.avatar,
+                        username: newPostFromServer.author.username,
+                        avatar: newPostFromServer?.author?.avatar || "http://localhost:8080/storage/avatar/anhdaidien.jpg",
                     },
                     likes: newPostFromServer.likes || [],
                     comments: newPostFromServer.comments || [],
