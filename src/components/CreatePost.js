@@ -24,7 +24,7 @@ const CreatePost = ({ onPostCreated }) => {
     // Lấy thông tin người dùng từ localStorage để hiển thị
     const refresh_token = JSON.parse(localStorage.getItem('refresh_token'));
     const username = refresh_token?.user?.name || 'Bạn';
-    const userAvatar = refresh_token?.user?.avatar || "http://localhost:8080/storage/avatar/anhdaidien.jpg";
+    const userAvatar = `http://localhost:8080/storage/avatar/${refresh_token?.user?.avatar}` || "http://localhost:8080/storage/avatar/anhdaidien.jpg";
 
     /**
      * Effect để xử lý việc đóng modal khi người dùng click ra bên ngoài.

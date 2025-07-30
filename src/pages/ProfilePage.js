@@ -68,9 +68,9 @@ const ProfilePage = () => {
                         <div className="profile-stats">
                             <span><strong>{user.postCount}</strong> bài viết</span>
                             <span><strong>{user.followerCount}</strong> người theo dõi</span>
-                            <span><strong>{user.followingCount}</strong> đang theo dõi</span>
+                            <span><strong>{user.followingCount}</strong> bạn bè</span>
                         </div>
-                        <p className="profile-bio">{user.bio} tuán đấy</p>
+                        <p className="profile-bio">{user.bio}</p>
                     </div>
                 </div>
 

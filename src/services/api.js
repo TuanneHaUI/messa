@@ -125,7 +125,7 @@ export const fetchAllPosts = async () => {
         image: imageUrl,
         author: {
           username: post.author.username,
-          avatar: post.author.avatarUrl || `${BASE_URL}/storage/avatar/anhdaidien.jpg`,
+          avatar:`${BASE_URL}/storage/avatar/${post.author.avatarUrl}`,
         },
         likes: post.likeCount || 0,
         comments: post.commentCount || 0,
@@ -174,5 +174,17 @@ export const fetchProfile = async () => {
     throw error;
   }
 };
-
+export const updateProfileUser = async (formData) => {
+  try {
+    await apiClient.put('/updateUser', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return "response.data";
+  } catch (error) {
+    console.error('Lỗi khi update người dùng:', error);
+    throw error;
+  }
+};
 export default apiClient;

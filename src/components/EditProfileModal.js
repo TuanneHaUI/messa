@@ -1,24 +1,75 @@
-// src/components/EditProfileModal.js
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './EditProfileModal.css';
+import { updateProfileUser } from '../services/api';
 
-// Component này nhận vào:
-// - currentUser: thông tin người dùng hiện tại
-// - onSave: hàm để gọi khi người dùng bấm Lưu
-// - onClose: hàm để gọi khi người dùng bấm Đóng hoặc nút X
+async function urlToFile(url, fileName) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], fileName, { type: blob.type });
+}
+
 const EditProfileModal = ({ currentUser, onSave, onClose }) => {
-    // Tạo state để lưu trữ các giá trị đang được chỉnh sửa trong form
-    const [username, setUsername] = useState(currentUser.username);
-    const [bio, setBio] = useState(currentUser.bio || ''); // Dùng '' nếu bio là null/undefined
-    const [avatar, setAvatar] = useState(currentUser.avatar);
+    const fileInputRef = useRef(null);
 
-    const handleSave = () => {
-        const updatedUser = {
-            username,
-            bio,
-            avatar,
+    const [username, setUsername] = useState(currentUser.username);
+    const [bio, setBio] = useState(currentUser.bio || '');
+
+    const [avatarPreview, setAvatarPreview] = useState(currentUser.avatar);
+    const [avatarFile, setAvatarFile] = useState(null);
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setAvatarPreview(URL.createObjectURL(file));
+            setAvatarFile(file);
+        }
+    };
+
+    const handleSave = async () => {
+        const userData = {
+            username: username,
+            bio: bio
         };
-        onSave(updatedUser); // Gọi hàm onSave từ component cha và truyền dữ liệu mới
+
+        const formData = new FormData();
+
+        formData.append('user', JSON.stringify(userData));
+        formData.append('folder', 'avatar');
+
+        try {
+            let fileToSend;
+
+            if (avatarFile) {
+                fileToSend = avatarFile;
+            } else {
+                console.log("Không có file mới được chọn. Đang chuyển đổi ảnh cũ thành File để gửi đi:", currentUser.avatar);
+                const oldFileName = currentUser.avatar.split('/').pop() || 'current-avatar.jpg';
+                fileToSend = await urlToFile(currentUser.avatar, oldFileName);
+            }
+
+            formData.append('file', fileToSend);
+
+            await updateProfileUser(formData);
+
+            const updatedUIData = {
+                username,
+                bio,
+                avatar: avatarPreview,
+            };
+
+            onSave(updatedUIData);
+
+        } catch (error) {
+            console.error("Lỗi khi cập nhật profile:", error);
+            if (error.message.includes('CORS')) {
+                alert(
+                    "Lỗi CORS! Không thể tải ảnh đại diện cũ để gửi đi.\n\n" +
+                    "Vui lòng đảm bảo backend Spring Boot của bạn đã được cấu hình CORS để cho phép request từ frontend."
+                );
+            } else {
+                alert("Đã có lỗi xảy ra khi cập nhật. Vui lòng thử lại.");
+            }
+        }
     };
 
     return (
@@ -28,15 +79,28 @@ const EditProfileModal = ({ currentUser, onSave, onClose }) => {
                     <h2>Chỉnh sửa trang cá nhân</h2>
                     <button onClick={onClose} className="close-button">×</button>
                 </div>
+
                 <div className="modal-body">
-                    <div className="form-group">
-                        <label>Ảnh đại diện (URL)</label>
-                        <input
-                            type="text"
-                            value={avatar}
-                            onChange={(e) => setAvatar(e.target.value)}
-                        />
+                    <div className="form-group avatar-edit-container">
+                        <label>Ảnh đại diện</label>
+                        <div className="avatar-preview-wrapper">
+                            <button
+                                type="button"
+                                className="change-avatar-btn"
+                                onClick={() => fileInputRef.current.click()}
+                            >
+                                <img src={avatarPreview} alt="Avatar Preview" className="avatar-preview-image" />
+                            </button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                ref={fileInputRef}
+                                onChange={handleAvatarChange}
+                            />
+                        </div>
                     </div>
+
                     <div className="form-group">
                         <label>Tên người dùng</label>
                         <input
@@ -54,6 +118,7 @@ const EditProfileModal = ({ currentUser, onSave, onClose }) => {
                         ></textarea>
                     </div>
                 </div>
+
                 <div className="modal-footer">
                     <button onClick={onClose} className="button-secondary">Hủy</button>
                     <button onClick={handleSave} className="button-primary">Lưu thay đổi</button>

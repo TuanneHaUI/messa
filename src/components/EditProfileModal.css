@@ -12,6 +12,44 @@
     z-index: 2000;
 }
 
+/* Thêm vào file EditProfileModal.css */
+
+.avatar-edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.avatar-preview-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar-preview-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dbdbdb;
+}
+
+.change-avatar-btn {
+    background-color: transparent;
+    border: none;
+    color: #0095f6;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px 10px;
+}
+
+.change-avatar-btn:hover {
+    color: #00376b;
+}
+
 .modal-content {
     background: var(--color-surface);
     padding: 1.5rem;
