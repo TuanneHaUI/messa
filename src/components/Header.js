@@ -1,24 +1,19 @@
-// src/components/Header.js
 import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 import './Header.css';
-import { FaSun, FaMoon, FaFacebookMessenger, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaSun, FaMoon, FaFacebookMessenger, FaCog, FaSignOutAlt, FaUserFriends } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { logout } from '../services/api';
 import { toast } from 'react-toastify';
 
-const Header = () => {
+const Header = ({ onShowFriendRequestsClick }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
-
-    // --- BẮT ĐẦU PHẦN CẬP NHẬT ---
-    const [userAvatar, setUserAvatar] = useState("https://i.pravatar.cc/40"); // Avatar mặc định
-    // --- KẾT THÚC PHẦN CẬP NHẬT ---
+    const [userAvatar, setUserAvatar] = useState("https://i.pravatar.cc/40");
 
     const menuRef = useRef(null);
     const navigate = useNavigate();
 
-    // Effect để lấy avatar từ localStorage khi component được tải lần đầu
     useEffect(() => {
         const storedData = localStorage.getItem('refresh_token');
         if (storedData) {
@@ -26,7 +21,6 @@ const Header = () => {
                 const parsedData = JSON.parse(storedData);
                 const avatarFileName = parsedData?.user?.avatar;
                 if (avatarFileName) {
-                    // Giả sử backend trả về tên file, cần ghép với base URL
                     setUserAvatar(`http://localhost:8080/storage/avatar/${avatarFileName}`);
                 }
             } catch (e) {
@@ -35,10 +29,8 @@ const Header = () => {
         }
     }, []);
 
-    // Effect để lắng nghe sự kiện khi profile được cập nhật ở nơi khác
     useEffect(() => {
         const handleProfileUpdate = (event) => {
-            // event.detail chứa dữ liệu mới được gửi từ ProfilePage
             const newAvatarUrl = event.detail.avatar;
             console.log("Header đã nhận được avatar mới:", newAvatarUrl);
             setUserAvatar(newAvatarUrl);
@@ -46,12 +38,10 @@ const Header = () => {
 
         window.addEventListener('profileUpdated', handleProfileUpdate);
 
-        // Dọn dẹp listener khi component bị unmount
         return () => {
             window.removeEventListener('profileUpdated', handleProfileUpdate);
         };
     }, []);
-    // --- KẾT THÚC PHẦN CẬP NHẬT ---
 
     useEffect(() => {
         if (isDarkMode) {
@@ -112,21 +102,21 @@ const Header = () => {
                     <NavLink to="/messages" className="nav-link">
                         <FaFacebookMessenger size={24} />
                     </NavLink>
+                    <button className="nav-link icon-btn" onClick={onShowFriendRequestsClick}>
+                        <FaUserFriends size={22} />
+                    </button>
                 </nav>
-
                 <div className="user-actions" ref={menuRef}>
                     <button className="theme-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
                         {isDarkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
                     </button>
-                    {/* --- BẮT ĐẦU PHẦN CẬP NHẬT --- */}
                     <img
-                        src={userAvatar} // Sử dụng state userAvatar thay vì link cứng
+                        src={userAvatar}
                         alt="User Avatar"
                         className="user-avatar"
                         onClick={() => setShowMenu(!showMenu)}
-                        key={userAvatar} // Thêm key để React chắc chắn render lại ảnh khi src thay đổi
+                        key={userAvatar}
                     />
-                    {/* --- KẾT THÚC PHẦN CẬP NHẬT --- */}
                     {showMenu && (
                         <div className="user-menu">
                             <div className="menu-item" onClick={handleSetting}>

@@ -8,46 +8,64 @@ import './HomePage.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchAllPosts } from '../services/api';
 import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import FriendRequest from '../components/FriendRequest';
+import { getAllFriendship } from '../services/friendshipapi';
+
 const HomePage = () => {
     const [posts, setPosts] = useState([]);
     const refresh_token = JSON.parse(localStorage.getItem('refresh_token'));
     const navigate = useNavigate();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const [showFriendRequests, setShowFriendRequests] = useState(false);
+    const getAllFriendShip = []
+    const [friendRequests, setFriendRequests] = useState([]);
     useEffect(() => {
-        if (refresh_token === null) {
+        const token = JSON.parse(localStorage.getItem('refresh_token'));
+        if (token === null) {
             toast.success('Vui lòng đăng nhập. Đang chuyển trang...', {
                 position: "top-right",
                 autoClose: 1000,
             });
             setTimeout(() => navigate('/login'), 1000);
+            return;
         }
 
         const fetchData = async () => {
             try {
+                //await getAllFriendship()
                 const fetchedPosts = await fetchAllPosts();
-                setPosts(fetchedPosts);
+                const sortedPosts = fetchedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                setPosts(sortedPosts);
             } catch (error) {
                 console.error("Lỗi khi load bài viết:", error);
             }
         };
+
         fetchData();
-    }, []);
+    }, []); // ✅ bỏ dependency, chạy duy nhất 1 lần sau khi render
+
 
     const handleCreatePost = (newPostData) => {
         console.log("✅ onPostCreated được gọi", newPostData);
-
         setPosts([newPostData, ...posts]);
     };
 
-    // Animation cho danh sách bài viết
+  const handleShowFriendRequestsClick = async () => {
+    try {
+        const data = await getAllFriendship();
+        setFriendRequests(data);
+        setShowFriendRequests(true);
+    } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+    }
+};
+
     const listVariants = {
         visible: {
             opacity: 1,
             transition: {
                 when: "beforeChildren",
-                staggerChildren: 0.1, // Mỗi item xuất hiện cách nhau 0.1s
+                staggerChildren: 0.1,
             },
         },
         hidden: {
@@ -57,7 +75,12 @@ const HomePage = () => {
 
     return (
         <>
-            <Header />
+            <Header onShowFriendRequestsClick={handleShowFriendRequestsClick} />
+            <FriendRequest
+                showFriendRequests={showFriendRequests}
+                setShowFriendRequests={setShowFriendRequests}
+                friendRequests={friendRequests}
+            />
             <div className="main-layout">
                 <LeftSidebar />
                 <main className="feed-container">
